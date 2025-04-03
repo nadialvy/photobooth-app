@@ -12,6 +12,12 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
   weight: "100 900",
 });
+const lilitaOne = localFont({
+  src: "./fonts/LilitaOne-Regular.ttf",
+  variable: "--font-lilita-one",
+  weight: "400",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -26,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${lilitaOne.variable} antialiased`}
       >
         {children}
       </body>

@@ -11,7 +11,16 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        pinkPh:{
+          300: ""
+        }
       },
+      fontFamily: {
+        lilita: "var(--font-lilita-one)",
+      },
+      backgroundImage:{
+        "gradientCloud": "url('/images/background.png')"
+      }
     },
   },
   plugins: [],
