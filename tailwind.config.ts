@@ -17,9 +17,11 @@ const config: Config = {
       },
       fontFamily: {
         lilita: "var(--font-lilita-one)",
+        quicksand: "var(--font-quicksand)",
       },
       backgroundImage:{
-        "gradientCloud": "url('/images/background.png')"
+        "gradientCloud": "url('/images/background.png')",
+        "gradientSettings": "url('/images/settings.png')"
       }
     },
   },
