@@ -22,12 +22,12 @@ const config: Config = {
       backgroundImage:{
         "gradientCloud": "url('/images/background.png')",
         "gradientSettings": "url('/images/settings.png')",
-        "filterNone": "url('/images/filter/none.png')",
-        "filterBnW": "url('/images/filter/bnw.png')",
-        "filterFairy": "url('/images/filter/fairy.png')",
-        "filterPinkGlow": "url('/images/filter/pinkGlow.png')",
-        "filterRio": "url('/images/filter/rio.png')",
-        "grainTexture": "url('/images/filter/graintexture.jpg')",
+        "filterNone": "url('/images/filterThumbnail/none.png')",
+        "filterBnW": "url('/images/filterThumbnail/bnw.png')",
+        "filterFairy": "url('/images/filterThumbnail/fairy.png')",
+        "filterPinkGlow": "url('/images/filterThumbnail/pinkGlow.png')",
+        "filterRio": "url('/images/filterThumbnail/rio.png')",
+        "grainTexture": "url('/images/filterThumbnail/graintexture.jpg')",
       }
     },
   },

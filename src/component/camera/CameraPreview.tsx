@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import CameraOverlay from "./CameraOverlay";
 
 export default function CameraPreview({
   className = "",
@@ -24,6 +25,7 @@ export default function CameraPreview({
   const cssFilter = filterMap[filter] || "none";
 
   useEffect(() => {
+    const videoElement = videoRef.current;
     const startCamera = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -34,8 +36,8 @@ export default function CameraPreview({
           audio: false,
         });
 
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
+        if (videoElement) {
+          videoElement.srcObject = stream;
           setIsCameraReady(true);
         }
       } catch (error) {
@@ -46,9 +48,8 @@ export default function CameraPreview({
     startCamera();
 
     return () => {
-      if (videoRef.current?.srcObject) {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        const tracks = (videoRef.current.srcObject as MediaStream).getTracks();
+      if (videoElement?.srcObject) {
+        const tracks = (videoElement.srcObject as MediaStream).getTracks();
         for (const track of tracks) {
           track.stop();
         }
@@ -66,9 +67,7 @@ export default function CameraPreview({
         className="camera-frame"
         style={{ filter: cssFilter }}
       />
-      {filter === "rio" && (
-        <div className="absolute top-0 left-0 w-full h-full z-20 pointer-events-none rio-overlay" />
-      )}
+      <CameraOverlay type={filter as "none" | "rio"} />
     </div>
   );
 }

@@ -22,7 +22,7 @@ const FilterThumbnail: FC<FilterThumbnailProps> = ({
       }`}
       onClick={onClick}
     >
-      <p className="text-white z-10 text-[12px] font-semibold mx-auto text-center font-quicksand">
+      <p className="text-white z-10 text-[12px] mx-auto text-center font-quicksand">
         {label}
       </p>
       {selected && (
