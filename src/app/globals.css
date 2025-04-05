@@ -26,24 +26,12 @@ body {
   }
 }
 
-.camera-wrapper {
-  width: 100%;
-  max-width: 500px; /* atur sesuai keinginan */
-  aspect-ratio: 3 / 4; /* frame ukuran 3:4, cocok buat selfie */
-  border: 6px dashed #ffb8c7; /* bisa ganti jadi border lucu */
-  border-radius: 24px;
-  overflow: hidden;
-  position: relative;
-  background-color: #fef6fa;
-}
-
 .camera-frame {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* bisa juga contain */
-  transform: scaleX(-1); /* mirror effect, biar kayak kamera depan */
+  object-fit: cover;
+  transform: scaleX(-1);
 }
-
 
 .rio-overlay {
   background: linear-gradient(
@@ -56,4 +44,3 @@ body {
   mix-blend-mode: overlay;
   border-radius: inherit;
 }
-
