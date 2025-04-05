@@ -110,7 +110,7 @@ export default function Home() {
   return (
     <div className="w-full p-6 flex flex-col justify-center items-center bg-gradientCloud bg-cover bg-center bg-no-repeat min-h-screen font-[family-name:var(--font-lilita-one)]">
       <p
-        className="text-[48px] max-md:text-[30px] text-center text-[#fcd3d2] drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]
+        className="text-[48px] max-md:text-[30px] text-center text-blush drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]
 "
       >
         Self Photobooth
@@ -142,22 +142,22 @@ export default function Home() {
           />
           <div className="absolute top-0 z-0 right-0 w-[450px] h-[430px] flex justify-center items-center">
             {countdownDisplay && (
-              <span className="text-[40px] font-bold text-white bg-[#8f73d1] bg-opacity-70 rounded-full w-[90px] h-[90px] flex items-center justify-center drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] animate-pulse">
+              <span className="text-[40px] font-bold text-white bg-lavender bg-opacity-70 rounded-full w-[90px] h-[90px] flex items-center justify-center drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] animate-pulse">
                 {countdownDisplay}
               </span>
             )}
           </div>
         </div>
-        <div className="lg:w-1/2 w-full gap-4 bg-gradientSettings border-[8px]  border-[#efb4e1] bg-cover bg-center bg-no-repeat rounded-3xl p-6 h-full flex flex-col justify-start items-start">
+        <div className="lg:w-1/2 w-full gap-4 bg-gradientSettings border-[8px] border-blossom bg-cover bg-center bg-no-repeat rounded-3xl p-6 h-full flex flex-col justify-start items-start">
           <div>
-            <p className="text-[28px] max-md:text-[22px] text-[#8f73d1] drop-shadow-[0_1.2px_1.2px_#ffe1cd]">
+            <p className="text-[28px] max-md:text-[22px] text-lavender drop-shadow-[0_1.2px_1.2px_peach]">
               Photo Preview
             </p>
             <div className="flex gap-3 mt-3 justify-start max-md:flex-wrap items-start">
               {Array.from({ length: numberPhotos }, (_, idx) => (
                 <div
                   key={idx}
-                  className="bg-[#ffdada] border-2 border-[#efb4e1] w-[60px] h-[60px] md:w-[100px] md:h-[100px] lg:w-[120px] lg:h-[120px] rounded-lg overflow-hidden"
+                  className="bg-cotton border-2 border-blossom w-[60px] h-[60px] md:w-[100px] md:h-[100px] lg:w-[120px] lg:h-[120px] rounded-lg overflow-hidden"
                 >
                   {capturedPhotos[idx] && (
                     <div className="relative w-full h-full">
@@ -169,12 +169,12 @@ export default function Home() {
                         className="w-full h-full object-cover z-30"
                       />
                       <div
-                        className="p-1 rounded-full absolute z-50 -top-1 right-[2%] drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] hover:cursor-pointer text-[#f9cbcb] group"
+                        className="p-1 rounded-full absolute z-50 -top-1 right-[2%] drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] hover:cursor-pointer text-petal group"
                         title="Re-take the picture"
                         onClick={() => deletePhoto(idx)}
                       >
                         x
-                        <span className="invisible group-hover:visible absolute -top-8 left-1/2 -translate-x-1/2 bg-[#674f9e] text-white text-xs rounded py-1 px-2 whitespace-nowrap">
+                        <span className="invisible group-hover:visible absolute -top-8 left-1/2 -translate-x-1/2 bg-grape text-white text-xs rounded py-1 px-2 whitespace-nowrap">
                           Re-take the picture
                         </span>
                       </div>
@@ -186,7 +186,7 @@ export default function Home() {
           </div>
           <div className="flex md:flex-row flex-col gap-4 w-full justify-center items-start">
             <div className="w-full md:w-1/2">
-              <p className="text-[28px] max-md:text-[22px] text-[#8f73d1] drop-shadow-[0_1.2px_1.2px_#ffe1cd]">
+              <p className="text-[28px] max-md:text-[22px] text-lavender drop-shadow-[0_1.2px_1.2px_peach]">
                 Filter
               </p>
               <div className="flex flex-col gap-2 items-center justify-center">
@@ -234,36 +234,36 @@ export default function Home() {
               </div>
             </div>
             <div className="w-full md:w-1/2">
-              <p className="text-[28px] text-[#8f73d1] max-md:text-[22px]">
+              <p className="text-[28px] text-lavender max-md:text-[22px]">
                 Options
               </p>
               <div>
-                <p className="text-[#8f73d1] max-md:text-[16px] font-quicksand font-bold text-[20px]">
+                <p className="text-lavender max-md:text-[16px] font-quicksand font-bold text-[20px]">
                   Number of Photos
                 </p>
-                <div className="flex bg-[#fddeea] border-4 border-[#efb4e1] px-4 py-2 max-md:py-0 rounded-full gap-2 justify-between items-center">
+                <div className="flex bg-ballet border-4 border-blossom px-4 py-2 max-md:py-0 rounded-full gap-2 justify-between items-center">
                   <p
                     onClick={decreasePhotos}
-                    className="hover:cursor-pointer text-[#674f9e] text-[20px]"
+                    className="hover:cursor-pointer text-grape text-[20px]"
                   >
                     -
                   </p>
-                  <p className="text-[#674f9e] text-[20px]">{numberPhotos}</p>
+                  <p className="text-grape text-[20px]">{numberPhotos}</p>
                   <p
                     onClick={increasePhotos}
-                    className="hover:cursor-pointer text-[#674f9e] text-[20px]"
+                    className="hover:cursor-pointer text-grape text-[20px]"
                   >
                     +
                   </p>
                 </div>
               </div>
               <div className="">
-                <p className="text-[#8f73d1] font-quicksand mt-2 max-md:text-[16px] font-bold text-[20px]">
+                <p className="text-lavender font-quicksand mt-2 max-md:text-[16px] font-bold text-[20px]">
                   Timer
                 </p>
-                <div className="flex bg-[#fddeea] border-4 border-[#efb4e1] max-md:py-0 px-4 py-2 rounded-full gap-2 justify-between items-center">
+                <div className="flex bg-ballet border-4 border-blossom max-md:py-0 px-4 py-2 rounded-full gap-2 justify-between items-center">
                   <select
-                    className="bg-transparent w-full text-[#674f9e] text-[20px] outline-none"
+                    className="bg-transparent w-full text-grape text-[20px] outline-none"
                     value={timer}
                     onChange={(e) => setTimer(Number.parseInt(e.target.value))}
                   >
@@ -276,8 +276,8 @@ export default function Home() {
             </div>
           </div>
           <Link href="/print-photo" className="w-full">
-            <div className="bg-[#fddeea] border-4 border-[#efb4e1] hover:cursor-pointer transition-all duration-300 hover:bg-[#efcdda] px-4 py-2 rounded-full w-full flex gap-2 justify-center items-center">
-              <p className="font-lilita text-[20px] text-[#a285e4]">
+            <div className="bg-ballet border-4 border-blossom hover:cursor-pointer transition-all duration-300 hover:bg-[#efcdda] px-4 py-2 rounded-full w-full flex gap-2 justify-center items-center">
+              <p className="font-lilita text-[20px] text-wisteria">
                 Print your photos
               </p>
             </div>

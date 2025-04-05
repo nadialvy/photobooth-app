@@ -11,9 +11,18 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        pinkPh:{
-          300: ""
-        }
+        pinkPh: {
+          300: "",
+        },
+        blush: "var(--blush)",
+        lavender: "var(--lavender)",
+        blossom: "var(--blossom)",
+        peach: "var(--peach)",
+        cotton: "var(--cotton)",
+        petal: "var(--petal)",
+        grape: "var(--grape)",
+        ballet: "var(--ballet)",
+        wisteria: "var(--wisteria)",
       },
       fontFamily: {
         lilita: "var(--font-lilita-one)",
