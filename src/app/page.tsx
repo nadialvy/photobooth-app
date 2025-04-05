@@ -20,17 +20,19 @@ export default function Home() {
   const [capturedPhotos, setCapturedPhotos] = useState<string[]>([]);
   const capturePhoto = async () => {
     if (timer > 0) {
-      setCountdownDisplay(timer);
+      let currentCount = timer;
       const countdownInterval = setInterval(() => {
-        setCountdownDisplay((prev) => {
-          if (prev === null || prev <= 1) {
-            clearInterval(countdownInterval);
-            takePhoto();
-            return null;
-          }
-          return prev - 1;
-        });
+        currentCount -= 1;
+        if (currentCount === 0) {
+          clearInterval(countdownInterval);
+          takePhoto();
+          setCountdownDisplay(null);
+        } else {
+          setCountdownDisplay(currentCount);
+        }
       }, 1000);
+
+      setCountdownDisplay(timer);
       return;
     }
 
