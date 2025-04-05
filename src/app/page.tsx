@@ -276,7 +276,7 @@ export default function Home() {
             </div>
           </div>
           <Link href="/print-photo" className="w-full">
-            <div className="bg-ballet border-4 border-blossom hover:cursor-pointer transition-all duration-300 hover:bg-[#efcdda] px-4 py-2 rounded-full w-full flex gap-2 justify-center items-center">
+            <div className="bg-ballet border-4 border-blossom hover:cursor-pointer transition-all duration-300 hover:bg-mauve px-4 py-2 rounded-full w-full flex gap-2 justify-center items-center">
               <p className="font-lilita text-[20px] text-wisteria">
                 Print your photos
               </p>

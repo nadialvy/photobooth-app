@@ -23,6 +23,7 @@ const config: Config = {
         grape: "var(--grape)",
         ballet: "var(--ballet)",
         wisteria: "var(--wisteria)",
+        mauve: "var(--mauve)",
       },
       fontFamily: {
         lilita: "var(--font-lilita-one)",
