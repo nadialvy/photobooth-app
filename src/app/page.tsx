@@ -1,19 +1,15 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
-import CameraPreview from "@/component/camera/CameraPreview";
-import FilterSelector from "@/component/settings/FilterSelector";
-import Options from "@/component/settings/Options";
-import PhotoPreview from "@/component/settings/PhotoPreview";
-import { getVideoElement, takePhoto } from "@/lib/photoUtils";
+import { filterMap } from "./constant/filterFormula";
+import FilterThumbnail from "@/component/FilterThumbnail";
+import CameraPreview from "@/component/CameraPreview";
 export default function Home() {
   const [countdownDisplay, setCountdownDisplay] = useState<number | null>(null);
   const [numberPhotos, setNumberPhotos] = useState(1);
   const [selectedFilter, setSelectedFilter] = useState<
     "none" | "grayscale" | "fairy" | "pinkGlow" | "rio"
   >("none");
-  const [timer, setTimer] = useState(0);
-  const [capturedPhotos, setCapturedPhotos] = useState<string[]>([]);
 
   const increasePhotos = () => {
     if (numberPhotos < 4) {
@@ -26,6 +22,8 @@ export default function Home() {
     }
   };
 
+  const [timer, setTimer] = useState(0);
+  const [capturedPhotos, setCapturedPhotos] = useState<string[]>([]);
   const capturePhoto = async () => {
     if (timer > 0) {
       let currentCount = timer;
@@ -33,7 +31,7 @@ export default function Home() {
         currentCount -= 1;
         if (currentCount === 0) {
           clearInterval(countdownInterval);
-          doTakePhoto();
+          takePhoto();
           setCountdownDisplay(null);
         } else {
           setCountdownDisplay(currentCount);
@@ -44,15 +42,48 @@ export default function Home() {
       return;
     }
 
-    doTakePhoto();
+    // If no timer, take photo immediately
+    takePhoto();
   };
 
-  const doTakePhoto = () => {
-    const video = getVideoElement();
+  const takePhoto = () => {
+    const video = document.querySelector("video");
     if (!video) return;
 
-    const photoData = takePhoto(video, selectedFilter);
-    if (!photoData) return;
+    const canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const context = canvas.getContext("2d");
+    if (!context) return;
+
+    // Apply filter
+    context.filter = filterMap[selectedFilter];
+    if (selectedFilter === "rio") {
+      const gradient = context.createLinearGradient(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+      gradient.addColorStop(0, "rgba(255, 94, 58, 0.5)");
+      gradient.addColorStop(0.33, "rgba(220, 148, 155, 0.5)");
+      gradient.addColorStop(0.66, "rgba(146, 101, 169, 0.5)");
+      gradient.addColorStop(1, "rgba(152, 184, 255, 0.5)");
+
+      context.setTransform(1, 0, 0, 1, 0, 0);
+      context.globalCompositeOperation = "overlay";
+      context.fillStyle = gradient;
+      context.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // Flip the image horizontally, trust me the ladies will love it 😆✌🏻
+    context.translate(canvas.width, 0);
+    context.scale(-1, 1);
+    context.drawImage(video, 0, 0);
+
+    context.setTransform(1, 0, 0, 1, 0, 0);
+    const photoData = canvas.toDataURL("image/jpeg");
 
     setCapturedPhotos((prev) => {
       const emptyIndex = prev.findIndex((photo) => photo === "");
@@ -75,7 +106,10 @@ export default function Home() {
 
   return (
     <div className="w-full p-6 flex flex-col justify-center items-center bg-gradientCloud bg-cover bg-center bg-no-repeat h-screen font-[family-name:var(--font-lilita-one)]">
-      <div className="inset-0 absolute bg-black bg-opacity-5 z-0 h-screen w-full"></div>
+      <div className="inset-0 absolute bg-black bg-opacity-5 z-0 h-screen w-full">
+        {}
+      </div>
+
       <p
         className="text-[48px] text-[#fcd3d2] drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]
 "
@@ -114,23 +148,129 @@ export default function Home() {
           </div>
         </div>
         <div className="w-1/2 gap-4 bg-gradientSettings border-[8px]  border-[#efb4e1] bg-cover bg-center bg-no-repeat rounded-3xl p-6 h-full flex flex-col justify-start items-start">
-          <PhotoPreview
-            numberPhotos={numberPhotos}
-            capturedPhotos={capturedPhotos}
-            deletePhoto={deletePhoto}
-          />
+          <div>
+            <p className="text-[28px] text-[#8f73d1] drop-shadow-[0_1.2px_1.2px_#ffe1cd]">
+              Photo Preview
+            </p>
+            <div className="flex gap-3 mt-3 justify-start items-start">
+              {Array.from({ length: numberPhotos }, (_, idx) => (
+                <div
+                  key={idx}
+                  className="bg-[#ffdada] border-2 border-[#efb4e1] w-[120px] h-[120px] rounded-lg overflow-hidden"
+                >
+                  {capturedPhotos[idx] && (
+                    <div className="relative w-full h-full">
+                      <Image
+                        src={capturedPhotos[idx]}
+                        alt={`Photo ${idx + 1}`}
+                        width={100}
+                        height={100}
+                        className="w-full h-full object-cover z-30"
+                      />
+                      <div
+                        className="p-1 rounded-full absolute z-50 -top-1 right-[2%] drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] hover:cursor-pointer text-[#f9cbcb] group"
+                        title="Re-take the picture"
+                        onClick={() => deletePhoto(idx)}
+                      >
+                        x
+                        <span className="invisible group-hover:visible absolute -top-8 left-1/2 -translate-x-1/2 bg-[#674f9e] text-white text-xs rounded py-1 px-2 whitespace-nowrap">
+                          Re-take the picture
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
           <div className="flex gap-4 w-full justify-center items-start">
-            <FilterSelector
-              selectedFilter={selectedFilter}
-              setSelectedFilter={setSelectedFilter}
-            />
-            <Options
-              numberPhotos={numberPhotos}
-              timer={timer}
-              setTimer={setTimer}
-              increasePhotos={increasePhotos}
-              decreasePhotos={decreasePhotos}
-            />
+            <div className="w-1/2">
+              <p className="text-[28px] text-[#8f73d1] drop-shadow-[0_1.2px_1.2px_#ffe1cd]">
+                Filter
+              </p>
+              <div className="flex flex-col gap-2 items-center justify-center">
+                <div className="flex w-full justify-start gap-2 items-center">
+                  <div
+                    className={`relative w-[70px] h-[70px] bg-center bg-cover bg-no-repeat hover:cursor-pointer flex justify-end items-end rounded-lg bg-filterNone ${
+                      selectedFilter ? "border-2 border-white" : ""
+                    }`}
+                    onClick={() => setSelectedFilter("none")}
+                  >
+                    <p className="text-white z-10 text-[12px] font-semibold mx-auto text-center font-quicksand">
+                      {"Normal"}
+                    </p>
+                    {selectedFilter === "none" && (
+                      <div className="absolute inset-0 bg-black rounded-lg bg-opacity-35 z-0 h-full w-full" />
+                    )}
+                  </div>
+                  <FilterThumbnail
+                    label="Black & White"
+                    bgClass="bg-filterBnW"
+                    selected={selectedFilter === "grayscale"}
+                    onClick={() => setSelectedFilter("grayscale")}
+                  />
+                  <FilterThumbnail
+                    label="Fairy"
+                    bgClass="bg-filterFairy"
+                    selected={selectedFilter === "fairy"}
+                    onClick={() => setSelectedFilter("fairy")}
+                  />
+                </div>
+                <div className=" flex w-full justify-start gap-2 items-center">
+                  <FilterThumbnail
+                    label="Pink Glow"
+                    bgClass="bg-filterPinkGlow"
+                    selected={selectedFilter === "pinkGlow"}
+                    onClick={() => setSelectedFilter("pinkGlow")}
+                  />
+                  <FilterThumbnail
+                    label="Rio de Janeiro"
+                    bgClass="bg-filterRio"
+                    selected={selectedFilter === "rio"}
+                    onClick={() => setSelectedFilter("rio")}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="w-1/2">
+              <p className="text-[28px] text-[#8f73d1] ">Options</p>
+              <div>
+                <p className="text-[#8f73d1] font-quicksand font-bold text-[20px]">
+                  Number of Photos
+                </p>
+                <div className="flex bg-[#fddeea] border-4 border-[#efb4e1] px-4 py-2 rounded-full gap-2 justify-between items-center">
+                  <p
+                    onClick={decreasePhotos}
+                    className="hover:cursor-pointer text-[#674f9e] text-[20px]"
+                  >
+                    -
+                  </p>
+                  <p className="text-[#674f9e] text-[20px]">{numberPhotos}</p>
+                  <p
+                    onClick={increasePhotos}
+                    className="hover:cursor-pointer text-[#674f9e] text-[20px]"
+                  >
+                    +
+                  </p>
+                </div>
+              </div>
+              <div className="">
+                <p className="text-[#8f73d1] font-quicksand font-bold text-[20px]">
+                  Timer
+                </p>
+                <div className="flex bg-[#fddeea] border-4 border-[#efb4e1] px-4 py-2 rounded-full gap-2 justify-between items-center">
+                  <select
+                    className="bg-transparent w-full text-[#674f9e] text-[20px] outline-none"
+                    value={timer}
+                    onChange={(e) => setTimer(Number.parseInt(e.target.value))}
+                  >
+                    <option value={0}>0</option>
+                    <option value={3}>3</option>
+                    <option value={5}>5</option>
+                  </select>
+                </div>
+              </div>
+            </div>
           </div>
           <div className="bg-[#fddeea] border-4 border-[#efb4e1] hover:cursor-pointer transition-all duration-300 hover:bg-[#efcdda] px-4 py-2 rounded-full w-full flex gap-2 justify-center items-center">
             <p className="font-lilita text-[20px] text-[#a285e4]">
