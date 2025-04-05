@@ -3,6 +3,7 @@ import CameraPreview from "@/component/CameraPreview";
 import Image from "next/image";
 import { useState } from "react";
 export default function Home() {
+  const [countdownDisplay, setCountdownDisplay] = useState<number | null>(null);
   const [numberPhotos, setNumberPhotos] = useState(1);
   const increasePhotos = () => {
     if (numberPhotos < 4) {
@@ -18,6 +19,28 @@ export default function Home() {
   const [timer, setTimer] = useState(0);
   const [capturedPhotos, setCapturedPhotos] = useState<string[]>([]);
   const capturePhoto = async () => {
+    if (timer > 0) {
+      let currentCount = timer;
+      const countdownInterval = setInterval(() => {
+        currentCount -= 1;
+        if (currentCount === 0) {
+          clearInterval(countdownInterval);
+          takePhoto();
+          setCountdownDisplay(null);
+        } else {
+          setCountdownDisplay(currentCount);
+        }
+      }, 1000);
+
+      setCountdownDisplay(timer);
+      return;
+    }
+
+    // If no timer, take photo immediately
+    takePhoto();
+  };
+
+  const takePhoto = () => {
     const video = document.querySelector("video");
     if (!video) return;
 
@@ -87,6 +110,13 @@ export default function Home() {
             height={240}
             className="absolute hover:cursor-pointer hover:brightness-75 transition-all duration-200 z-50 bottom-[22%] left-[50%] translate-x-[-50%] translate-y-[50%] object-cover"
           />
+          <div className="absolute top-0 z-0 right-0 w-[450px] h-[430px] flex justify-center items-center">
+            {countdownDisplay && (
+              <span className="text-[40px] font-bold text-white bg-[#8f73d1] bg-opacity-70 rounded-full w-[90px] h-[90px] flex items-center justify-center drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] animate-pulse">
+                {countdownDisplay}
+              </span>
+            )}
+          </div>
         </div>
         <div className="w-1/2 gap-4 bg-gradientSettings border-[8px]  border-[#efb4e1] bg-cover bg-center bg-no-repeat rounded-3xl p-6 h-full flex flex-col justify-start items-start">
           <div>
