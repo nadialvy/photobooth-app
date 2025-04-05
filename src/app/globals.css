@@ -43,3 +43,24 @@ body {
   object-fit: cover; /* bisa juga contain */
   transform: scaleX(-1); /* mirror effect, biar kayak kamera depan */
 }
+
+
+.rio-overlay {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 94, 58, 0.6),
+    rgba(220, 148, 155, 0.6),
+    rgba(146, 101, 169, 0.6),
+    rgba(152, 184, 255, 0.6)
+  );
+  mix-blend-mode: overlay;
+  border-radius: inherit;
+}
+
+.grain-overlay {
+  background-image: url('/images/filter/graintexture.jpg');
+  background-size: cover;
+  opacity: 0.8;
+  mix-blend-mode: overlay;
+}
+

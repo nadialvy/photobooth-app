@@ -1,10 +1,15 @@
 "use client";
 import CameraPreview from "@/component/CameraPreview";
+import FilterThumbnail from "@/component/FilterThumbnail";
 import Image from "next/image";
 import { useState } from "react";
 export default function Home() {
   const [countdownDisplay, setCountdownDisplay] = useState<number | null>(null);
   const [numberPhotos, setNumberPhotos] = useState(1);
+  const [selectedFilter, setSelectedFilter] = useState<
+    "none" | "grayscale" | "fairy" | "pinkGlow" | "rio"
+  >("none");
+
   const increasePhotos = () => {
     if (numberPhotos < 4) {
       setNumberPhotos(numberPhotos + 1);
@@ -80,7 +85,7 @@ export default function Home() {
 
   return (
     <div className="w-full p-6 flex flex-col justify-center items-center bg-gradientCloud bg-cover bg-center bg-no-repeat h-screen font-[family-name:var(--font-lilita-one)]">
-      <div className="inset-0 absolute bg-black bg-opacity-15 z-0 h-screen w-full">
+      <div className="inset-0 absolute bg-black bg-opacity-5 z-0 h-screen w-full">
         {}
       </div>
 
@@ -100,7 +105,10 @@ export default function Home() {
               height={500}
               className="w-full h-full z-10"
             />
-            <CameraPreview className="absolute top-[13%] z-0 left-[13%] w-[450px] h-[430px]" />
+            <CameraPreview
+              filter={selectedFilter}
+              className="absolute top-[13%] z-0 left-[13%] w-[450px] h-[430px]"
+            />
           </div>
           <Image
             onClick={capturePhoto}
@@ -123,7 +131,7 @@ export default function Home() {
             <p className="text-[28px] text-[#8f73d1] drop-shadow-[0_1.2px_1.2px_#ffe1cd]">
               Photo Preview
             </p>
-            <div className="flex gap-3 justify-start items-start">
+            <div className="flex gap-3 mt-3 justify-start items-start">
               {Array.from({ length: numberPhotos }, (_, idx) => (
                 <div
                   key={idx}
@@ -157,34 +165,50 @@ export default function Home() {
           </div>
           <div className="flex gap-4 w-full justify-center items-start">
             <div className="w-1/2">
-              <p
-                className="text-[28px] text-[#8f73d1] drop-shadow-[0_1.2px_1.2px_#ffe1cd]
-"
-              >
+              <p className="text-[28px] text-[#8f73d1] drop-shadow-[0_1.2px_1.2px_#ffe1cd]">
                 Filter
               </p>
               <div className="flex flex-col gap-2 items-center justify-center">
-                <div className=" flex w-full justify-around gap-2 items-center">
-                  <div className="bg-purple-500 rounded-lg w-[70px] h-[70px]">
-                    1
+                <div className="flex w-full justify-start gap-2 items-center">
+                  <div
+                    className={`relative w-[70px] h-[70px] bg-center bg-cover bg-no-repeat hover:cursor-pointer flex justify-end items-end rounded-lg bg-filterNone ${
+                      selectedFilter ? "border-2 border-white" : ""
+                    }`}
+                    onClick={() => setSelectedFilter("none")}
+                  >
+                    <p className="text-white z-10 text-[12px] font-semibold mx-auto text-center font-quicksand">
+                      {"Normal"}
+                    </p>
+                    {selectedFilter === "none" && (
+                      <div className="absolute inset-0 bg-black rounded-lg bg-opacity-35 z-0 h-full w-full" />
+                    )}
                   </div>
-                  <div className="bg-purple-500 rounded-lg w-[70px] h-[70px]">
-                    1
-                  </div>
-                  <div className="bg-purple-500 rounded-lg w-[70px] h-[70px]">
-                    2
-                  </div>
+                  <FilterThumbnail
+                    label="Black & White"
+                    bgClass="bg-filterBnW"
+                    selected={selectedFilter === "grayscale"}
+                    onClick={() => setSelectedFilter("grayscale")}
+                  />
+                  <FilterThumbnail
+                    label="Fairy"
+                    bgClass="bg-filterFairy"
+                    selected={selectedFilter === "fairy"}
+                    onClick={() => setSelectedFilter("fairy")}
+                  />
                 </div>
-                <div className=" flex w-full justify-around gap-2 items-center">
-                  <div className="bg-purple-500 rounded-lg w-[70px] h-[70px]">
-                    3
-                  </div>
-                  <div className="bg-purple-500 rounded-lg w-[70px] h-[70px]">
-                    1
-                  </div>
-                  <div className="bg-purple-500 rounded-lg w-[70px] h-[70px]">
-                    4
-                  </div>
+                <div className=" flex w-full justify-start gap-2 items-center">
+                  <FilterThumbnail
+                    label="Pink Glow"
+                    bgClass="bg-filterPinkGlow"
+                    selected={selectedFilter === "pinkGlow"}
+                    onClick={() => setSelectedFilter("pinkGlow")}
+                  />
+                  <FilterThumbnail
+                    label="Rio de Janeiro"
+                    bgClass="bg-filterRio"
+                    selected={selectedFilter === "rio"}
+                    onClick={() => setSelectedFilter("rio")}
+                  />
                 </div>
               </div>
             </div>
@@ -195,7 +219,6 @@ export default function Home() {
                   Number of Photos
                 </p>
                 <div className="flex bg-[#fddeea] border-4 border-[#efb4e1] px-4 py-2 rounded-full gap-2 justify-between items-center">
-                  {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
                   <p
                     onClick={decreasePhotos}
                     className="hover:cursor-pointer text-[#674f9e] text-[20px]"
@@ -203,7 +226,6 @@ export default function Home() {
                     -
                   </p>
                   <p className="text-[#674f9e] text-[20px]">{numberPhotos}</p>
-                  {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
                   <p
                     onClick={increasePhotos}
                     className="hover:cursor-pointer text-[#674f9e] text-[20px]"
