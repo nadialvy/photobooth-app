@@ -57,10 +57,3 @@ body {
   border-radius: inherit;
 }
 
-.grain-overlay {
-  background-image: url('/images/filter/graintexture.jpg');
-  background-size: cover;
-  opacity: 0.8;
-  mix-blend-mode: overlay;
-}
-

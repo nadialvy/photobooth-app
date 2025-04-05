@@ -1,8 +1,9 @@
 "use client";
-import CameraPreview from "@/component/CameraPreview";
-import FilterThumbnail from "@/component/FilterThumbnail";
 import Image from "next/image";
 import { useState } from "react";
+import { filterMap } from "./constant/filterFormula";
+import FilterThumbnail from "@/component/FilterThumbnail";
+import CameraPreview from "@/component/CameraPreview";
 export default function Home() {
   const [countdownDisplay, setCountdownDisplay] = useState<number | null>(null);
   const [numberPhotos, setNumberPhotos] = useState(1);
@@ -56,7 +57,27 @@ export default function Home() {
     const context = canvas.getContext("2d");
     if (!context) return;
 
-    // Flip the image horizontally
+    // Apply filter
+    context.filter = filterMap[selectedFilter];
+    if (selectedFilter === "rio") {
+      const gradient = context.createLinearGradient(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+      gradient.addColorStop(0, "rgba(255, 94, 58, 0.5)");
+      gradient.addColorStop(0.33, "rgba(220, 148, 155, 0.5)");
+      gradient.addColorStop(0.66, "rgba(146, 101, 169, 0.5)");
+      gradient.addColorStop(1, "rgba(152, 184, 255, 0.5)");
+
+      context.setTransform(1, 0, 0, 1, 0, 0);
+      context.globalCompositeOperation = "overlay";
+      context.fillStyle = gradient;
+      context.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // Flip the image horizontally, trust me the ladies will love it 😆✌🏻
     context.translate(canvas.width, 0);
     context.scale(-1, 1);
     context.drawImage(video, 0, 0);
@@ -146,7 +167,6 @@ export default function Home() {
                         height={100}
                         className="w-full h-full object-cover z-30"
                       />
-                      {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
                       <div
                         className="p-1 rounded-full absolute z-50 -top-1 right-[2%] drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] hover:cursor-pointer text-[#f9cbcb] group"
                         title="Re-take the picture"
