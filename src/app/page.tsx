@@ -1,9 +1,10 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
-import { filterMap } from "./constant/filterFormula";
+import { filterMap } from "../constant/filterFormula";
 import FilterThumbnail from "@/component/FilterThumbnail";
 import CameraPreview from "@/component/CameraPreview";
+import Link from "next/link";
 export default function Home() {
   const [countdownDisplay, setCountdownDisplay] = useState<number | null>(null);
   const [numberPhotos, setNumberPhotos] = useState(1);
@@ -107,7 +108,7 @@ export default function Home() {
   };
 
   return (
-    <div className="max-w-full p-6 flex flex-col justify-center items-center bg-gradientCloud bg-cover bg-center bg-no-repeat min-h-screen font-[family-name:var(--font-lilita-one)]">
+    <div className="w-full p-6 flex flex-col justify-center items-center bg-gradientCloud bg-cover bg-center bg-no-repeat min-h-screen font-[family-name:var(--font-lilita-one)]">
       <p
         className="text-[48px] max-md:text-[30px] text-center text-[#fcd3d2] drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]
 "
@@ -274,11 +275,13 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="bg-[#fddeea] border-4 border-[#efb4e1] hover:cursor-pointer transition-all duration-300 hover:bg-[#efcdda] px-4 py-2 rounded-full w-full flex gap-2 justify-center items-center">
-            <p className="font-lilita text-[20px] text-[#a285e4]">
-              Print your photos
-            </p>
-          </div>
+          <Link href="/print-photo" className="w-full">
+            <div className="bg-[#fddeea] border-4 border-[#efb4e1] hover:cursor-pointer transition-all duration-300 hover:bg-[#efcdda] px-4 py-2 rounded-full w-full flex gap-2 justify-center items-center">
+              <p className="font-lilita text-[20px] text-[#a285e4]">
+                Print your photos
+              </p>
+            </div>
+          </Link>
         </div>
       </div>
     </div>
