@@ -11,9 +11,6 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        pinkPh: {
-          300: "",
-        },
         blush: "var(--blush)",
         lavender: "var(--lavender)",
         blossom: "var(--blossom)",

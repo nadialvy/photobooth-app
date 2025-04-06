@@ -64,7 +64,7 @@ export default function CameraPreview({
         playsInline
         muted
         className="camera-frame"
-        style={{ filter: cssFilter }}
+        style={{ filter: cssFilter, aspectRatio: "4/3" }}
       />
       {filter === "rio" && (
         <div className="absolute top-0 left-0 w-full h-full z-20 pointer-events-none rio-overlay" />
