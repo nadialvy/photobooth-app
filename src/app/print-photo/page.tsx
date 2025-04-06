@@ -4,17 +4,15 @@ import { generateFramedPhoto } from "@/lib/photoUtils";
 import { frameConfig } from "@/constants/frameConfig";
 
 export default function PrintPhotoPage() {
-  const [photo] = useState<string>(
-    () => localStorage.getItem("latestPhoto") ?? ""
-  );
   const [selectedFrame, setSelectedFrame] =
     useState<keyof typeof frameConfig>("polaroid2");
   const [preview, setPreview] = useState<string | null>(null);
 
   useEffect(() => {
+    const photo = localStorage.getItem("latestPhoto");
     if (!photo) return;
     generateFramedPhoto(photo, selectedFrame).then(setPreview);
-  }, [photo, selectedFrame]);
+  }, [selectedFrame]);
 
   const downloadImage = () => {
     if (!preview) return;
