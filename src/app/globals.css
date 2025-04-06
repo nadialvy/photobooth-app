@@ -5,6 +5,18 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Custom Colors */
+  --blush: #fcd3d2;
+  --lavender: #8f73d1;
+  --blossom: #efb4e1;
+  --peach: #ffe1cd;
+  --cotton: #ffdada;
+  --petal: #f9cbcb;
+  --grape: #674f9e;
+  --ballet: #fddeea;
+  --wisteria: #a285e4;
+  --mauve: #efcdda;
 }
 
 @media (prefers-color-scheme: dark) {
