@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
-import { filterMap } from "../constant/filterFormula";
+import { filterMap } from "../constants/filterFormula";
 import FilterThumbnail from "@/component/FilterThumbnail";
 import CameraPreview from "@/component/CameraPreview";
 import Link from "next/link";
@@ -61,11 +61,16 @@ export default function Home() {
 
   const takePhoto = () => {
     const video = document.querySelector("video");
+
     if (!video) return;
 
     const canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    // make photo 4:3
+    canvas.width = 960;
+    canvas.height = 720;
+
+    const sx = (video.videoWidth - canvas.width) / 2;
+    const sy = 0;
 
     const context = canvas.getContext("2d");
     if (!context) return;
@@ -95,19 +100,35 @@ export default function Home() {
     // Flip the image horizontally, trust me the ladies will love it 😆✌🏻
     context.translate(canvas.width, 0);
     context.scale(-1, 1);
-    context.drawImage(video, 0, 0);
+    context.drawImage(
+      video,
+      sx,
+      sy,
+      canvas.width,
+      canvas.height,
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
 
     context.setTransform(1, 0, 0, 1, 0, 0);
     const photoData = canvas.toDataURL("image/jpeg");
 
     setCapturedPhotos((prev) => {
       const emptyIndex = prev.findIndex((photo) => photo === "");
+      let newPhotos;
+
       if (emptyIndex !== -1) {
-        const newPhotos = [...prev];
+        newPhotos = [...prev];
         newPhotos[emptyIndex] = photoData;
-        return newPhotos;
+      } else {
+        newPhotos = [...prev, photoData];
       }
-      return [...prev, photoData];
+
+      localStorage.setItem("latestPhoto", newPhotos[newPhotos.length - 1]);
+
+      return newPhotos;
     });
   };
 
@@ -115,6 +136,15 @@ export default function Home() {
     setCapturedPhotos((prev) => {
       const newPhotos = [...prev];
       newPhotos[index] = "";
+
+      // Cek apakah foto yang dihapus adalah latestPhoto
+      const deletedPhoto = prev[index];
+      const latestPhoto = localStorage.getItem("latestPhoto");
+
+      if (latestPhoto === deletedPhoto) {
+        localStorage.removeItem("latestPhoto");
+      }
+
       return newPhotos;
     });
   };
