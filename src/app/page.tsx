@@ -5,19 +5,29 @@ import { filterMap } from "../constants/filterFormula";
 import FilterThumbnail from "@/component/FilterThumbnail";
 import CameraPreview from "@/component/CameraPreview";
 import Link from "next/link";
+
+import { cn } from "@/lib/utils";
+
+type Filter = "none" | "grayscale" | "fairy" | "pinkGlow" | "rio";
+
 export default function Home() {
   const [countdownDisplay, setCountdownDisplay] = useState<number | null>(null);
   const [numberPhotos, setNumberPhotos] = useState(1);
-  const [selectedFilter, setSelectedFilter] = useState<
-    "none" | "grayscale" | "fairy" | "pinkGlow" | "rio"
-  >("none");
+  const [selectedFilter, setSelectedFilter] = useState<Filter>("none");
+
+  function onFilterChange(filter: Filter) {
+    if (countdownDisplay) return null;
+    setSelectedFilter(filter);
+  }
 
   const increasePhotos = () => {
+    if (!!countdownDisplay) return null;
     if (numberPhotos < 4) {
       setNumberPhotos(numberPhotos + 1);
     }
   };
   const decreasePhotos = () => {
+    if (!!countdownDisplay) return null;
     if (numberPhotos > 1) {
       setNumberPhotos(numberPhotos - 1);
     }
@@ -26,6 +36,8 @@ export default function Home() {
   const [timer, setTimer] = useState(0);
   const [capturedPhotos, setCapturedPhotos] = useState<string[]>([]);
   const capturePhoto = async () => {
+    // prevent photo capture when the timer is active
+    if (!!countdownDisplay) return null;
     if (timer > 0) {
       let currentCount = timer;
       const countdownInterval = setInterval(() => {
@@ -168,7 +180,12 @@ export default function Home() {
             alt="button"
             width={240}
             height={240}
-            className="absolute max-md:w-32 hover:cursor-pointer hover:brightness-75 transition-all duration-200 z-50 bottom-[22%] left-[50%] translate-x-[-50%] translate-y-[50%] object-cover"
+            className={cn(
+              "absolute max-md:w-32 transition-all duration-200 z-50 bottom-[22%] left-[50%] translate-x-[-50%] translate-y-[50%] object-cover",
+              countdownDisplay
+                ? "hover:cursor-not-allowed brightness-75"
+                : "hover:cursor-pointer hover:brightness-75",
+            )}
           />
           <div className="absolute top-0 z-0 right-0 w-[450px] h-[430px] flex justify-center items-center">
             {countdownDisplay && (
@@ -219,13 +236,18 @@ export default function Home() {
               <p className="text-[28px] max-md:text-[22px] text-lavender drop-shadow-[0_1.2px_1.2px_peach]">
                 Filter
               </p>
-              <div className="flex flex-col gap-2 items-center justify-center">
+              <div
+                className={cn(
+                  "flex flex-col gap-2 items-center justify-center",
+                  countdownDisplay && "hover:pointer-events-none opacity-60",
+                )}
+              >
                 <div className="flex w-full justify-start gap-2 items-center">
                   <div
                     className={`relative w-[70px] h-[70px] bg-center bg-cover bg-no-repeat hover:cursor-pointer flex justify-end items-end rounded-lg bg-filterNone ${
                       selectedFilter ? "border-2 border-white" : ""
                     }`}
-                    onClick={() => setSelectedFilter("none")}
+                    onClick={() => onFilterChange("none")}
                   >
                     <p className="text-white z-10 text-[12px] font-semibold mx-auto text-center font-quicksand">
                       {"Normal"}
@@ -238,13 +260,13 @@ export default function Home() {
                     label="Black & White"
                     bgClass="bg-filterBnW"
                     selected={selectedFilter === "grayscale"}
-                    onClick={() => setSelectedFilter("grayscale")}
+                    onClick={() => onFilterChange("grayscale")}
                   />
                   <FilterThumbnail
                     label="Fairy"
                     bgClass="bg-filterFairy"
                     selected={selectedFilter === "fairy"}
-                    onClick={() => setSelectedFilter("fairy")}
+                    onClick={() => onFilterChange("fairy")}
                   />
                 </div>
                 <div className=" flex w-full justify-start gap-2 items-center">
@@ -252,13 +274,13 @@ export default function Home() {
                     label="Pink Glow"
                     bgClass="bg-filterPinkGlow"
                     selected={selectedFilter === "pinkGlow"}
-                    onClick={() => setSelectedFilter("pinkGlow")}
+                    onClick={() => onFilterChange("pinkGlow")}
                   />
                   <FilterThumbnail
                     label="Rio de Janeiro"
                     bgClass="bg-filterRio"
                     selected={selectedFilter === "rio"}
-                    onClick={() => setSelectedFilter("rio")}
+                    onClick={() => onFilterChange("rio")}
                   />
                 </div>
               </div>
@@ -274,14 +296,31 @@ export default function Home() {
                 <div className="flex bg-ballet border-4 border-blossom px-4 py-2 max-md:py-0 rounded-full gap-2 justify-between items-center">
                   <p
                     onClick={decreasePhotos}
-                    className="hover:cursor-pointer text-grape text-[20px]"
+                    className={cn(
+                      "text-grape text-[20px]",
+                      countdownDisplay
+                        ? "cursor-not-allowed opacity-70"
+                        : "hover:cursor-pointer",
+                    )}
                   >
                     -
                   </p>
-                  <p className="text-grape text-[20px]">{numberPhotos}</p>
+                  <p
+                    className={cn(
+                      "text-grape text-[20px]",
+                      countdownDisplay && "opacity-70",
+                    )}
+                  >
+                    {numberPhotos}
+                  </p>
                   <p
                     onClick={increasePhotos}
-                    className="hover:cursor-pointer text-grape text-[20px]"
+                    className={cn(
+                      "text-grape text-[20px]",
+                      countdownDisplay
+                        ? "cursor-not-allowed opacity-70"
+                        : "hover:cursor-pointer",
+                    )}
                   >
                     +
                   </p>
@@ -293,7 +332,11 @@ export default function Home() {
                 </p>
                 <div className="flex bg-ballet border-4 border-blossom max-md:py-0 px-4 py-2 rounded-full gap-2 justify-between items-center">
                   <select
-                    className="bg-transparent w-full text-grape text-[20px] outline-none"
+                    className={cn(
+                      "bg-transparent w-full text-grape text-[20px] outline-none",
+                      countdownDisplay && "cursor-not-allowed",
+                    )}
+                    disabled={!!countdownDisplay}
                     value={timer}
                     onChange={(e) => setTimer(Number.parseInt(e.target.value))}
                   >
@@ -305,8 +348,18 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <Link href="/print-photo" className="w-full">
-            <div className="bg-ballet border-4 border-blossom hover:cursor-pointer transition-all duration-300 hover:bg-mauve px-4 py-2 rounded-full w-full flex gap-2 justify-center items-center">
+          <Link
+            href={countdownDisplay ? "/#" : "/print-photo"}
+            className="w-full"
+          >
+            <div
+              className={cn(
+                "bg-ballet border-4 border-blossom transition-all duration-300 px-4 py-2 rounded-full w-full flex gap-2 justify-center items-center",
+                countdownDisplay
+                  ? "hover:cursor-not-allowed"
+                  : "hover:cursor-pointer hover:bg-mauve",
+              )}
+            >
               <p className="font-lilita text-[20px] text-wisteria">
                 Print your photos
               </p>
