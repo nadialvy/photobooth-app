@@ -4,6 +4,7 @@ import { generateFramedPhoto } from "@/lib/photoUtils";
 import { frameConfig } from "@/constants/frameConfig";
 import Link from "next/link";
 import { ChevronLeft, LoaderCircle } from "lucide-react";
+import Image from "next/image";
 
 export default function PrintPhotoPage() {
   const [selectedFrame, setSelectedFrame] =
@@ -39,9 +40,11 @@ export default function PrintPhotoPage() {
         </Link>
         {preview ? (
           <div className="p-12">
-            <img
+            <Image
+              width={frameConfig[selectedFrame].canvasSize.width}
+              height={frameConfig[selectedFrame].canvasSize.height}
               src={preview}
-              alt="Framed Photo"
+              alt="Framed"
               className="max-w-full rounded-lg shadow-lg"
             />
           </div>
@@ -53,6 +56,7 @@ export default function PrintPhotoPage() {
           />
         )}
         <button
+          type="button"
           onClick={downloadImage}
           className="mt-6 w-full px-4 py-2 bg-wisteria text-white rounded-lg shadow hover:brightness-110 transition"
         >
@@ -66,11 +70,18 @@ export default function PrintPhotoPage() {
             <div
               key={id}
               onClick={() => setSelectedFrame(id as keyof typeof frameConfig)}
-              className={`w-[100px] h-[100px] p-1 rounded-lg cursor-pointer transition ${
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  setSelectedFrame(id as keyof typeof frameConfig);
+                }
+              }}
+              className={`w-[100px] h-[100px] text-bl p-1 rounded-lg cursor-pointer transition ${
                 selectedFrame === id ? "border-4 border-white" : "opacity-60"
               }`}
             >
-              <img
+              <Image
+                width={frame.canvasSize.width}
+                height={frame.canvasSize.height}
                 src={frame.path}
                 alt={id}
                 className="w-full h-full object-cover rounded"

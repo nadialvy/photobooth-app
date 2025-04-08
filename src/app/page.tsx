@@ -21,13 +21,13 @@ export default function Home() {
   }
 
   const increasePhotos = () => {
-    if (!!countdownDisplay) return null;
+    if (countdownDisplay) return null;
     if (numberPhotos < 4) {
       setNumberPhotos(numberPhotos + 1);
     }
   };
   const decreasePhotos = () => {
-    if (!!countdownDisplay) return null;
+    if (countdownDisplay) return null;
     if (numberPhotos > 1) {
       setNumberPhotos(numberPhotos - 1);
     }
@@ -37,7 +37,7 @@ export default function Home() {
   const [capturedPhotos, setCapturedPhotos] = useState<string[]>([]);
   const capturePhoto = async () => {
     // prevent photo capture when the timer is active
-    if (!!countdownDisplay) return null;
+    if (countdownDisplay) return null;
     if (timer > 0) {
       let currentCount = timer;
       const countdownInterval = setInterval(() => {
@@ -117,7 +117,7 @@ export default function Home() {
 
     setCapturedPhotos((prev) => {
       const emptyIndex = prev.findIndex((photo) => photo === "");
-      let newPhotos;
+      let newPhotos: string[];
 
       if (emptyIndex !== -1) {
         newPhotos = [...prev];
@@ -184,7 +184,7 @@ export default function Home() {
               "absolute max-md:w-32 transition-all duration-200 z-50 bottom-[22%] left-[50%] translate-x-[-50%] translate-y-[50%] object-cover",
               countdownDisplay
                 ? "hover:cursor-not-allowed brightness-75"
-                : "hover:cursor-pointer hover:brightness-75",
+                : "hover:cursor-pointer hover:brightness-75"
             )}
           />
           <div className="absolute top-0 z-0 right-0 w-[450px] h-[430px] flex justify-center items-center">
@@ -203,7 +203,7 @@ export default function Home() {
             <div className="flex gap-3 mt-3 justify-start max-md:flex-wrap items-start">
               {Array.from({ length: numberPhotos }, (_, idx) => (
                 <div
-                  key={idx}
+                  key={capturedPhotos[idx] || `photo-${idx}`}
                   className="bg-cotton border-2 border-blossom w-[60px] h-[60px] md:w-[100px] md:h-[100px] lg:w-[120px] lg:h-[120px] rounded-lg overflow-hidden"
                 >
                   {capturedPhotos[idx] && (
@@ -219,6 +219,7 @@ export default function Home() {
                         className="p-1 rounded-full absolute z-50 -top-1 right-[2%] drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] hover:cursor-pointer text-petal group"
                         title="Re-take the picture"
                         onClick={() => deletePhoto(idx)}
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') deletePhoto(idx); }}
                       >
                         x
                         <span className="invisible group-hover:visible absolute -top-8 left-1/2 -translate-x-1/2 bg-grape text-white text-xs rounded py-1 px-2 whitespace-nowrap">
@@ -239,7 +240,7 @@ export default function Home() {
               <div
                 className={cn(
                   "flex flex-col gap-2 items-center justify-center",
-                  countdownDisplay && "hover:pointer-events-none opacity-60",
+                  countdownDisplay && "hover:pointer-events-none opacity-60"
                 )}
               >
                 <div className="flex w-full justify-start gap-2 items-center">
@@ -248,6 +249,7 @@ export default function Home() {
                       selectedFilter ? "border-2 border-white" : ""
                     }`}
                     onClick={() => onFilterChange("none")}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') onFilterChange("none"); }}
                   >
                     <p className="text-white z-10 text-[12px] font-semibold mx-auto text-center font-quicksand">
                       {"Normal"}
@@ -294,13 +296,14 @@ export default function Home() {
                   Number of Photos
                 </p>
                 <div className="flex bg-ballet border-4 border-blossom px-4 py-2 max-md:py-0 rounded-full gap-2 justify-between items-center">
+                  {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
                   <p
                     onClick={decreasePhotos}
                     className={cn(
                       "text-grape text-[20px]",
                       countdownDisplay
                         ? "cursor-not-allowed opacity-70"
-                        : "hover:cursor-pointer",
+                        : "hover:cursor-pointer"
                     )}
                   >
                     -
@@ -308,18 +311,19 @@ export default function Home() {
                   <p
                     className={cn(
                       "text-grape text-[20px]",
-                      countdownDisplay && "opacity-70",
+                      countdownDisplay && "opacity-70"
                     )}
                   >
                     {numberPhotos}
                   </p>
+                  {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
                   <p
                     onClick={increasePhotos}
                     className={cn(
                       "text-grape text-[20px]",
                       countdownDisplay
                         ? "cursor-not-allowed opacity-70"
-                        : "hover:cursor-pointer",
+                        : "hover:cursor-pointer"
                     )}
                   >
                     +
@@ -334,7 +338,7 @@ export default function Home() {
                   <select
                     className={cn(
                       "bg-transparent w-full text-grape text-[20px] outline-none",
-                      countdownDisplay && "cursor-not-allowed",
+                      countdownDisplay && "cursor-not-allowed"
                     )}
                     disabled={!!countdownDisplay}
                     value={timer}
@@ -357,7 +361,7 @@ export default function Home() {
                 "bg-ballet border-4 border-blossom transition-all duration-300 px-4 py-2 rounded-full w-full flex gap-2 justify-center items-center",
                 countdownDisplay
                   ? "hover:cursor-not-allowed"
-                  : "hover:cursor-pointer hover:bg-mauve",
+                  : "hover:cursor-pointer hover:bg-mauve"
               )}
             >
               <p className="font-lilita text-[20px] text-wisteria">
