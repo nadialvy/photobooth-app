@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📸 Photobooth App
 
-## Getting Started
+A sleek and responsive web-based photobooth application built with **Next.js**, **Tailwind CSS**, and **TypeScript**. Designed for events, parties, or personal use, this app allows users to capture and download photos directly from their browser.
 
-First, run the development server:
+## ✨ Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- 🎨 Modern UI with Tailwind CSS
+- ⚡ Fast and optimized with Next.js
+- 📷 Capture photos using the device's webcam
+- 💾 Download captured images
+- 🔧 Easy to configure and deploy
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Getting Started
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Prerequisites
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Ensure you have the following installed:
 
-## Learn More
+- [Node.js](https://nodejs.org/) (v16 or later)
+- [pnpm](https://pnpm.io/) (or use `npm` or `yarn`)
 
-To learn more about Next.js, take a look at the following resources:
+### Installation
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **Clone the repository:**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```bash
+   git clone https://github.com/nadialvy/photobooth-app.git
+   cd photobooth-app
+   ```
 
-## Deploy on Vercel
+2. **Install dependencies:**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   ```bash
+   pnpm install
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. **Run the development server:**
+   ```bash
+   pnpm dev
+   ```
+   Open your browser and navigate to `http://localhost:3000`. You should see the photobooth app running.
+4. **Build for production:**
+
+   ```bash
+   pnpm build
+   ```
+
+   This will create an optimized production build in the `.next` directory.
+
+5. **Start the production server:**
+   ```bash
+    pnpm start
+   ```
+   This will start the server in production mode. Open your browser and navigate to `http://localhost:3000` to see the live app.
+
+## 📸 Usage
+
+1. Allow camera access when prompted.
+2. Click the "Capture" button to take a photo.
+3. Click the "Download" button to save the photo to your device.
+4. Click the "Retake" button to take another photo.
+5. Click the "Reset" button to clear the captured photo and start over.
+
+## 📄 License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
