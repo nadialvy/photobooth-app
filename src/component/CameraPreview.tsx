@@ -28,8 +28,9 @@ export default function CameraPreview({
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
-            width: { ideal: 1280 },
-            height: { ideal: 720 },
+            width: { ideal: 720 },
+            height: { ideal: 960 },
+            aspectRatio: { ideal: 4 / 3 },
           },
           audio: false,
         });
@@ -64,7 +65,13 @@ export default function CameraPreview({
         playsInline
         muted
         className="camera-frame"
-        style={{ filter: cssFilter, aspectRatio: "4/3" }}
+        style={{
+          filter: cssFilter,
+          aspectRatio: "3/4",
+          objectFit: "cover",
+          width: "100%",
+          height: "100%",
+        }}
       />
       {filter === "rio" && (
         <div className="absolute top-0 left-0 w-full h-full z-20 pointer-events-none rio-overlay" />

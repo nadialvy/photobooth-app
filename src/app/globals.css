@@ -43,6 +43,7 @@ body {
   height: 100%;
   object-fit: cover;
   transform: scaleX(-1);
+  aspect-ratio: 3/4;
 }
 
 .rio-overlay {

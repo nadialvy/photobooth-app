@@ -65,7 +65,6 @@ export default function Home() {
 
   const takePhoto = () => {
     const video = document.querySelector("video");
-
     if (!video) return;
 
     // Create and setup flash element
@@ -131,9 +130,9 @@ export default function Home() {
 
   const capturePhotoFromVideo = (videoElement: HTMLVideoElement) => {
     const canvas = document.createElement("canvas");
-    // make photo 4:3
-    canvas.width = 960;
-    canvas.height = 720;
+    // make photo 3:4
+    canvas.width = 720;
+    canvas.height = 960;
 
     const context = canvas.getContext("2d");
     if (!context) return null;
@@ -238,21 +237,21 @@ export default function Home() {
       >
         Self Photobooth
       </p>
-      <div className="w-full flex-col lg:flex-row min-w-fit z-10 h-full flex justify-center items-center">
-        <div className="lg:w-1/2 w-full h-full relative">
+      <div className="w-full flex-col lg:flex-row min-w-fit z-10 h-full flex gap-12 justify-center items-center">
+        <div className="lg:w-2/5 w-full h-full relative">
           <div className="relative w-full h-full flex justify-center items-center">
             <Image
-              src="/images/frame.png"
+              src="/images/frame.webp"
               alt="Photobooth"
               width={500}
               height={500}
               className="w-full h-full z-10"
             />
-            <div className="w-[70%] h-[70%] absolute left-[15%] top-[18%] z-0">
+            <div className="h-auto w-[63%] absolute left-[18%] top-[14%] z-0">
               <CameraPreview
                 filter={selectedFilter}
-                className="absolute top-0 z-0 left-0 w-full h-full"
-              />
+                className="top-0 z-0 left-0 w-full h-full overflow-hidden"
+              />              
             </div>
           </div>
           <Image
@@ -262,7 +261,7 @@ export default function Home() {
             width={240}
             height={240}
             className={cn(
-              "absolute max-md:w-32 transition-all duration-200 z-50 bottom-[22%] left-[50%] translate-x-[-50%] translate-y-[50%] object-cover",
+              "absolute max-md:w-32 w-48 transition-all duration-200 z-50 bottom-[22%] left-[50%] translate-x-[-50%] translate-y-[50%] object-cover",
               countdownDisplay
                 ? "hover:cursor-not-allowed brightness-75"
                 : "hover:cursor-pointer hover:brightness-75"
@@ -276,7 +275,7 @@ export default function Home() {
             )}
           </div>
         </div>
-        <div className="lg:w-1/2 w-full gap-4 bg-gradientSettings border-[8px] border-blossom bg-cover bg-center bg-no-repeat rounded-3xl p-6 h-full flex flex-col justify-start items-start">
+        <div className="lg:w-3/5 w-full gap-4 bg-gradientSettings border-[8px] border-blossom bg-cover bg-center bg-no-repeat rounded-3xl p-6 h-full flex flex-col justify-start items-start">
           <div>
             <p className="text-[28px] max-md:text-[22px] text-lavender drop-shadow-[0_1.2px_1.2px_peach]">
               Photo Preview
@@ -285,22 +284,25 @@ export default function Home() {
               {Array.from({ length: numberPhotos }, (_, idx) => (
                 <div
                   key={capturedPhotos[idx] || `photo-${idx}`}
-                  className="bg-cotton border-2 border-blossom w-[60px] h-[60px] md:w-[100px] md:h-[100px] lg:w-[120px] lg:h-[120px] rounded-lg overflow-hidden"
+                  className="bg-cotton border-2 border-blossom w-[60px] h-[80px] md:w-[75px] md:h-[100px] lg:w-[120px] lg:h-[160px] rounded-lg overflow-hidden"
                 >
                   {capturedPhotos[idx] && (
                     <div className="relative w-full h-full">
                       <Image
                         src={capturedPhotos[idx]}
                         alt={`Photo ${idx + 1}`}
-                        width={100}
-                        height={100}
+                        width={120}
+                        height={160}
                         className="w-full h-full object-cover z-30"
                       />
                       <div
                         className="p-1 rounded-full absolute z-50 -top-1 right-[2%] drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] hover:cursor-pointer text-petal group"
                         title="Re-take the picture"
                         onClick={() => deletePhoto(idx)}
-                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') deletePhoto(idx); }}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ")
+                            deletePhoto(idx);
+                        }}
                       >
                         x
                         <span className="invisible group-hover:visible absolute -top-8 left-1/2 -translate-x-1/2 bg-grape text-white text-xs rounded py-1 px-2 whitespace-nowrap">
@@ -330,7 +332,10 @@ export default function Home() {
                       selectedFilter ? "border-2 border-white" : ""
                     }`}
                     onClick={() => onFilterChange("none")}
-                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') onFilterChange("none"); }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ")
+                        onFilterChange("none");
+                    }}
                   >
                     <p className="text-white z-10 text-[12px] font-semibold mx-auto text-center font-quicksand">
                       {"Normal"}
