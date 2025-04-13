@@ -19,7 +19,7 @@ export async function generateFramedPhoto(
     height: "100%",
   };
 
-  // Apply styles to container
+  // Apply styles to container. canvas size
   Object.assign(container.style, {
     position: "relative",
     width: `${frame.canvasSize.width}px`,
@@ -43,8 +43,10 @@ export async function generateFramedPhoto(
     ...commonStyles,
     left: "0",
     top: "0",
+    width: "100%",
+    height: "100%",
     backgroundImage: `url(${frame.path})`,
-    backgroundSize: "contain",
+    backgroundSize: " cover",
     backgroundRepeat: "no-repeat",
   });
 

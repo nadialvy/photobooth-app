@@ -8,7 +8,7 @@ import Image from "next/image";
 
 export default function PrintPhotoPage() {
   const [selectedFrame, setSelectedFrame] =
-    useState<keyof typeof frameConfig>("polaroid2");
+    useState<keyof typeof frameConfig>("polaroid1");
   const [preview, setPreview] = useState<string | null>(null);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export default function PrintPhotoPage() {
 
   return (
     <div className="w-full flex flex-col lg:flex-row min-h-screen p-6 bg-gradientCloud bg-cover font-[family-name:var(--font-lilita-one)] bg-center bg-no-repeat">
-      <div className="w-full flex-col p-4 lg:w-1/2 flex justify-start items-start">
+      <div className="w-full flex-col border border-green-500 lg:w-2/5 flex justify-start items-start">
         <Link
           href="/"
           className="flex justify-start items-center hover:bg-opacity-20 rounded-lg hover:bg-white px-2 py-1 transition-all duration-200"
@@ -39,21 +39,23 @@ export default function PrintPhotoPage() {
           </p>
         </Link>
         {preview ? (
-          <div className="p-12">
+          <div className="border p-4 flex-1 relative border-pink-400 w-full h-full">
             <Image
               width={frameConfig[selectedFrame].canvasSize.width}
               height={frameConfig[selectedFrame].canvasSize.height}
               src={preview}
               alt="Framed"
-              className="max-w-full rounded-lg shadow-lg"
+              className="w-full h-auto object-contain rounded-lg shadow-lg"
             />
           </div>
         ) : (
-          <LoaderCircle
-            className="mx-auto h-full animate-spin"
-            color="#8f73d1"
-            size={32}
-          />
+          <div className="flex-1 relative w-full h-full">
+            <LoaderCircle
+              className="mx-auto h-full animate-spin"
+              color="#8f73d1"
+              size={32}
+            />
+          </div>
         )}
         <button
           type="button"
@@ -63,7 +65,7 @@ export default function PrintPhotoPage() {
           Download
         </button>
       </div>
-      <div className="w-full lg:w-1/2 max-lg:mt-6 border-[8px] border-blossom p-4 bg-gradientSettings rounded-3xl">
+      <div className="w-full lg:w-3/5 max-lg:mt-6 border-[8px] border-blossom p-4 bg-gradientSettings rounded-3xl">
         <p className="text-[28px] text-[#8f73d1] mb-2">Select Frame</p>
         <div className="flex gap-4">
           {Object.entries(frameConfig).map(([id, frame]) => (
@@ -75,7 +77,7 @@ export default function PrintPhotoPage() {
                   setSelectedFrame(id as keyof typeof frameConfig);
                 }
               }}
-              className={`w-[100px] h-[100px] text-bl p-1 rounded-lg cursor-pointer transition ${
+              className={`w-[75px] h-[100px] text-bl p-1 rounded-lg cursor-pointer transition ${
                 selectedFrame === id ? "border-4 border-white" : "opacity-60"
               }`}
             >
