@@ -10,6 +10,10 @@ import { cn } from "@/lib/utils";
 
 type Filter = "none" | "grayscale" | "fairy" | "pinkGlow" | "rio";
 
+const FLASH_INITIAL_DELAY = 250; // Milliseconds to wait before showing the flash effect
+const FLASH_DURATION = 100; // Milliseconds that the flash remains fully visible
+const FLASH_FADE_DURATION = 50; // Milliseconds for the flash to fade out (must be less than FLASH_DURATION)
+
 export default function Home() {
   const [countdownDisplay, setCountdownDisplay] = useState<number | null>(null);
   const [numberPhotos, setNumberPhotos] = useState(1);
@@ -64,21 +68,108 @@ export default function Home() {
 
     if (!video) return;
 
+    // Create and setup flash element
+    const flash = createFlashElement();
+    video.style.position = "relative";
+    video.insertAdjacentElement("afterend", flash);
+
+    captureWithFlashEffect(video, flash);
+  };
+
+  const createFlashElement = () => {
+    const flash = document.createElement("div");
+    const flashStyles = {
+      position: "absolute",
+      top: "0",
+      left: "0",
+      width: "100%",
+      height: "100%",
+      backgroundColor: "white",
+      opacity: "0",
+      transition: `opacity ${FLASH_FADE_DURATION}ms ease-in-out`,
+      pointerEvents: "none",
+    };
+
+    Object.assign(flash.style, flashStyles);
+    return flash;
+  };
+
+  const wait = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
+  const captureWithFlashEffect = async (
+    videoElement: HTMLVideoElement,
+    flash: HTMLDivElement,
+  ) => {
+    // Play camera sound
+    playShutterSound();
+
+    // Execute flash sequence
+    await executeFlashSequence(flash);
+
+    // Capture the photo
+    const photoData = capturePhotoFromVideo(videoElement);
+    if (!photoData) return;
+
+    // Save the captured photo
+    savePhotoToState(photoData);
+
+    // Complete flash sequence
+    await completeFlashSequence(flash);
+  };
+
+  const playShutterSound = () => {
+    const audio = new Audio("/audios/cam_snap.mp3");
+    audio.play();
+  };
+
+  const executeFlashSequence = async (flash: HTMLDivElement) => {
+    await wait(FLASH_INITIAL_DELAY);
+    requestAnimationFrame(() => (flash.style.opacity = "1"));
+    await wait(FLASH_DURATION / 2);
+  };
+
+  const capturePhotoFromVideo = (videoElement: HTMLVideoElement) => {
     const canvas = document.createElement("canvas");
     // make photo 4:3
     canvas.width = 960;
     canvas.height = 720;
 
-    const sx = (video.videoWidth - canvas.width) / 2;
-    const sy = 0;
-
     const context = canvas.getContext("2d");
-    if (!context) return;
-    const audio = new Audio("/audios/cam_snap.mp3");
-    audio.play();
+    if (!context) return null;
+
+    const sx = (videoElement.videoWidth - canvas.width) / 2;
+    const sy = 0;
 
     // Apply filter
     context.filter = filterMap[selectedFilter];
+
+    // Apply special effects for specific filters
+    applySpecialFilterEffects(context, canvas);
+
+    // Flip the image horizontally, trust me the ladies will love it 😆 🏻
+    context.translate(canvas.width, 0);
+    context.scale(-1, 1);
+    context.drawImage(
+      videoElement,
+      sx,
+      sy,
+      canvas.width,
+      canvas.height,
+      0,
+      0,
+      canvas.width,
+      canvas.height,
+    );
+
+    context.setTransform(1, 0, 0, 1, 0, 0);
+    return canvas.toDataURL("image/jpeg");
+  };
+
+  const applySpecialFilterEffects = (
+    context: CanvasRenderingContext2D,
+    canvas: HTMLCanvasElement,
+  ) => {
     if (selectedFilter === "rio") {
       const gradient = context.createLinearGradient(
         0,
@@ -96,25 +187,9 @@ export default function Home() {
       context.fillStyle = gradient;
       context.fillRect(0, 0, canvas.width, canvas.height);
     }
+  };
 
-    // Flip the image horizontally, trust me the ladies will love it 😆✌🏻
-    context.translate(canvas.width, 0);
-    context.scale(-1, 1);
-    context.drawImage(
-      video,
-      sx,
-      sy,
-      canvas.width,
-      canvas.height,
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
-
-    context.setTransform(1, 0, 0, 1, 0, 0);
-    const photoData = canvas.toDataURL("image/jpeg");
-
+  const savePhotoToState = (photoData: string) => {
     setCapturedPhotos((prev) => {
       const emptyIndex = prev.findIndex((photo) => photo === "");
       let newPhotos: string[];
@@ -130,6 +205,12 @@ export default function Home() {
 
       return newPhotos;
     });
+  };
+
+  const completeFlashSequence = async (flash: HTMLDivElement) => {
+    await wait(FLASH_DURATION / 2);
+    flash.style.opacity = "0";
+    flash.remove();
   };
 
   const deletePhoto = (index: number) => {
