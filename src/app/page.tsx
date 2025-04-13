@@ -98,7 +98,7 @@ export default function Home() {
 
   const captureWithFlashEffect = async (
     videoElement: HTMLVideoElement,
-    flash: HTMLDivElement,
+    flash: HTMLDivElement
   ) => {
     // Play camera sound
     playShutterSound();
@@ -124,7 +124,9 @@ export default function Home() {
 
   const executeFlashSequence = async (flash: HTMLDivElement) => {
     await wait(FLASH_INITIAL_DELAY);
-    requestAnimationFrame(() => (flash.style.opacity = "1"));
+    requestAnimationFrame(() => {
+      flash.style.opacity = "1";
+    });
     await wait(FLASH_DURATION / 2);
   };
 
@@ -158,7 +160,7 @@ export default function Home() {
       0,
       0,
       canvas.width,
-      canvas.height,
+      canvas.height
     );
 
     context.setTransform(1, 0, 0, 1, 0, 0);
@@ -167,7 +169,7 @@ export default function Home() {
 
   const applySpecialFilterEffects = (
     context: CanvasRenderingContext2D,
-    canvas: HTMLCanvasElement,
+    canvas: HTMLCanvasElement
   ) => {
     if (selectedFilter === "rio") {
       const gradient = context.createLinearGradient(
@@ -197,10 +199,11 @@ export default function Home() {
         newPhotos = [...prev];
         newPhotos[emptyIndex] = photoData;
       } else {
-        newPhotos = [...prev, photoData];
+        newPhotos = [...prev];
+        newPhotos[numberPhotos - 1] = photoData;
       }
 
-      localStorage.setItem("latestPhoto", newPhotos[newPhotos.length - 1]);
+      localStorage.setItem("latestPhoto", photoData);
 
       return newPhotos;
     });
@@ -251,7 +254,7 @@ export default function Home() {
               <CameraPreview
                 filter={selectedFilter}
                 className="top-0 z-0 left-0 w-full h-full overflow-hidden"
-              />              
+              />
             </div>
           </div>
           <Image
