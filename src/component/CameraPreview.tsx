@@ -58,7 +58,7 @@ export default function CameraPreview({
   }, []);
 
   return (
-    <div className={`${className}`}>
+    <div className={className}>
       <video
         ref={videoRef}
         autoPlay
