@@ -38,8 +38,8 @@ export const frameConfig = {
     canvasSize: { width: 3000, height: 4000 },
     photoArea: convertFigmaToCanvasArea(
       { x: 117, y: 163, width: 1469, height: 1644 }, // measurement from Figma
-      { width: 1706, height: 2282 },                // original Figma frame size
-      { width: 3000, height: 4000 }                 // target canvas size. always use 3000 x 4000
-    ),
-  },
+      { width: 1706, height: 2282 }, // original Figma frame size
+      { width: 3000, height: 4000 } // target canvas size. always use 3000 x 4000
+    )
+  }
 };

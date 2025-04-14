@@ -3,7 +3,7 @@ import html2canvas from "html2canvas";
 
 export async function generateFramedPhoto(
   photoURL: string,
-  frameId: keyof typeof frameConfig,
+  frameId: keyof typeof frameConfig
 ) {
   const frame = frameConfig[frameId];
   if (!frame) throw new Error("Invalid frame ID");
@@ -16,14 +16,14 @@ export async function generateFramedPhoto(
   const commonStyles: Partial<CSSStyleDeclaration> = {
     position: "absolute",
     width: "100%",
-    height: "100%",
+    height: "100%"
   };
 
   // Apply styles to container. canvas size
   Object.assign(container.style, {
     position: "relative",
     width: `${frame.canvasSize.width}px`,
-    height: `${frame.canvasSize.height}px`,
+    height: `${frame.canvasSize.height}px`
   });
 
   // Apply styles to photo div
@@ -35,7 +35,7 @@ export async function generateFramedPhoto(
     height: `${frame.photoArea.height}px`,
     backgroundImage: `url(${photoURL})`,
     backgroundSize: "cover",
-    backgroundPosition: "center",
+    backgroundPosition: "center"
   });
 
   // Apply styles to frame div
@@ -47,7 +47,7 @@ export async function generateFramedPhoto(
     height: "100%",
     backgroundImage: `url(${frame.path})`,
     backgroundSize: " cover",
-    backgroundRepeat: "no-repeat",
+    backgroundRepeat: "no-repeat"
   });
 
   // Assemble and render
@@ -57,7 +57,7 @@ export async function generateFramedPhoto(
   const canvas = await html2canvas(container, {
     width: frame.canvasSize.width,
     height: frame.canvasSize.height,
-    backgroundColor: null,
+    backgroundColor: null
   });
 
   document.body.removeChild(container);

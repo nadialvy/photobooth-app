@@ -13,7 +13,7 @@ const FilterThumbnail: FC<FilterThumbnailProps> = ({
   label,
   bgClass,
   selected,
-  onClick,
+  onClick
 }) => {
   return (
     <div
