@@ -86,7 +86,7 @@ export default function Home() {
       backgroundColor: "white",
       opacity: "0",
       transition: `opacity ${FLASH_FADE_DURATION}ms ease-in-out`,
-      pointerEvents: "none",
+      pointerEvents: "none"
     };
 
     Object.assign(flash.style, flashStyles);
