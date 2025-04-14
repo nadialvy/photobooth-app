@@ -5,6 +5,7 @@ import { frameConfig } from "@/constants/frameConfig";
 import Link from "next/link";
 import { ChevronLeft, LoaderCircle } from "lucide-react";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 export default function PrintPhotoPage() {
   const [selectedFrame, setSelectedFrame] =
@@ -77,9 +78,10 @@ export default function PrintPhotoPage() {
                   setSelectedFrame(id as keyof typeof frameConfig);
                 }
               }}
-              className={`w-[75px] h-[100px] text-bl p-1 rounded-lg cursor-pointer transition ${
+              className={cn(
+                "w-[75px] h-[100px] text-bl p-1 rounded-lg cursor-pointer transition",
                 selectedFrame === id ? "border-4 border-white" : "opacity-60"
-              }`}
+              )}
             >
               <Image
                 width={frame.canvasSize.width}

@@ -331,9 +331,10 @@ export default function Home() {
               >
                 <div className="flex w-full justify-start gap-2 items-center">
                   <div
-                    className={`relative w-[70px] h-[70px] bg-center bg-cover bg-no-repeat hover:cursor-pointer flex justify-end items-end rounded-lg bg-filterNone ${
+                    className={cn(
+                      "relative w-[70px] h-[70px] bg-center bg-cover bg-no-repeat hover:cursor-pointer flex justify-end items-end rounded-lg bg-filterNone",
                       selectedFilter ? "border-2 border-white" : ""
-                    }`}
+                    )}
                     onClick={() => onFilterChange("none")}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" || e.key === " ")

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import {Quicksand} from "next/font/google";
+import { Quicksand } from "next/font/google";
+import { cn } from "@/lib/utils";
 import "./globals.css";
 
 const lilitaOne = localFont({
@@ -29,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${lilitaOne.variable} ${quicksand.variable} antialiased`}>{children}</body>
+      <body className={cn(lilitaOne.variable, quicksand.variable, "antialiased")}>{children}</body>
     </html>
   );
 }
